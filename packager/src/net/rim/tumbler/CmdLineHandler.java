@@ -39,7 +39,7 @@ public class CmdLineHandler {
     private static final String         OPTION_HELP = "-h";
     private static final String         OPTION_DEBUG = "-d";
     private static final String         OPTION_DEBUG_INTERNAL = "-dinternal";
-    
+
     private boolean         _requireSigned;
     private String          _password;
     private String          _cskPassword;
@@ -68,14 +68,14 @@ public class CmdLineHandler {
         }
 
         // get first param - exception case: /h
-        String input1 = inputParams[0].toLowerCase().trim();
+        String input1 = inputParams[0].trim();
         if (input1.equals(OPTION_HELP)) {
             Logger.logMessage(LogType.NONE, isPlayBook() ? "BBWP_PLAYBOOK_USAGE" : "BBWP_USAGE", WidgetPackager.getVersion());
             return false;
         }
 
         Logger.logMessage(LogType.INFO, "PROGRESS_CMDLINE_OPTIONS");
-        
+
         // check archive format
         if (!input1.endsWith(".zip")) {
             throw new CommandLineException("EXCEPTION_INVALID_COMMAND_LINE");
@@ -95,13 +95,13 @@ public class CmdLineHandler {
             parseOptionParameters(inputParams);
         } catch (Exception e) {
             throw new CommandLineException("EXCEPTION_INVALID_COMMAND_LINE");
-        }  
+        }
         return true;
     }
-    
+
     public SessionManager createSession() throws Exception {
         // parse location of packager
-        String bbwpInstallFolder; 
+        String bbwpInstallFolder;
         String installPath = getAbsolutePath(SessionManager.BBWP_JAR_PATH);
         File p = new File(installPath);
         if (p.isDirectory()) {
@@ -116,13 +116,13 @@ public class CmdLineHandler {
                     + FILE_SEP;
             bbwpInstallFolder = installPath;
         }
-        
+
         SessionManager.createInstance(
                 _archiveName,
                 _widgetArchive,
                 bbwpInstallFolder,
                 _outputDir,
-                _requireSigned, 
+                _requireSigned,
                 _password,
                 _cskPassword,
                 _p12Password,
@@ -135,13 +135,13 @@ public class CmdLineHandler {
                 isPlayBook());
         return SessionManager.getInstance();
     }
-        
+
     private String parseWidgetName(String archivePath) {
         String name = archivePath.substring(
                 archivePath.lastIndexOf(FILE_SEP) + 1, archivePath.lastIndexOf("."));
         return name;
     }
-      
+
     private String getAbsolutePath(String filePath) {
         try {
             return (new File(filePath)).getCanonicalFile().getAbsolutePath();
@@ -149,7 +149,7 @@ public class CmdLineHandler {
             return (new File(filePath)).getAbsolutePath();
         }
     }
-    
+
     private void parseOptionParameters(String[] params) throws Exception {
         _requireSigned = false;
         _password = "";
@@ -250,7 +250,8 @@ public class CmdLineHandler {
 
         // Populate correct source directory
         if (!_requireSource) {
-            _sourceDir = System.getProperty("java.io.tmpdir") + "widgetGen."
+            _sourceDir = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator")
+                    + "widgetGen."
                     + new Random().nextInt(2147483647) + new Date().getTime()
                     + ".tmp";
         } else {

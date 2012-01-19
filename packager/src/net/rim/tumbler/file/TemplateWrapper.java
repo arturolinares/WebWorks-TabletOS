@@ -32,11 +32,11 @@ import net.rim.tumbler.session.SessionManager;
 public class TemplateWrapper {
 
     public static final String DEVICE_PACKAGE = "blackberry.web.widget";
-    
+
     private BBWPProperties      _bbwpProperties;
     private Hashtable<String, TemplateFile> _templates;
     private File                _root;
-    
+
     public TemplateWrapper(BBWPProperties bbwpProperties) {
         _bbwpProperties = bbwpProperties;
         _templates = new Hashtable<String, TemplateFile>();
@@ -47,11 +47,10 @@ public class TemplateWrapper {
         }
         initTemplates(_root);
     }
-        
+
     public List<String> writeAllTemplates(String toDirectory)
             throws IOException {
         List<String> result = new ArrayList<String>();
-
         Enumeration<String> e = _templates.keys();
         while (e.hasMoreElements()) {
             // Populate destination path
@@ -73,7 +72,7 @@ public class TemplateWrapper {
         }
         return result;
     }
-    
+
     private void initTemplates(File f) {
         if (f.isDirectory()) {
             String[] children = f.list();
@@ -87,5 +86,5 @@ public class TemplateWrapper {
             _templates.put(relativePath, new TemplateFile(f
                     .getAbsolutePath(), relativePath));
         }
-    }   
+    }
 }

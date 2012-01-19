@@ -47,8 +47,8 @@ import net.rim.tumbler.xml.ConfigXMLParser;
 import net.rim.tumbler.xml.XMLParser;
 
 public class WidgetPackager {
-    
-    
+
+
     private static final String[] STANDARD_OUTPUTS = new String[] { ".cod",
             ".alx", ".cso", ".csl" };
     private static final String[] OTA_OUTPUTS = new String[] { ".cod", ".jad" };
@@ -59,7 +59,7 @@ public class WidgetPackager {
     public static final String SIGNATURE_KEY_FILE = "sigtool.csk";
 
     private static final String AUTOGEN_FILE = "webworks/config/CustomData.as";
-    
+
     private static final int NO_ERROR_RETURN_CODE = 0;
     private static final int PACKAGE_ERROR_RCODE = 1;
     private static final int VALIDATION_ERROR_RCODE = 2;
@@ -71,22 +71,22 @@ public class WidgetPackager {
      * Enables signing.
      */
     private static final boolean ENABLE_SIGNING = true;
-    
+
     public static void main(String[] args) {
         WidgetPackager wp = new WidgetPackager();
         wp.go(args);
     }
-    
+
     public void go(String[] args) {
         int returnCode = NO_ERROR_RETURN_CODE;
-        
+
         try {
             CmdLineHandler cmd = new CmdLineHandler();
             if (!cmd.parse(args)) {
                 // nothing to package
                 System.exit(NO_ERROR_RETURN_CODE);
             }
-            
+
             // create SessionManager
             SessionManager sessionManager = cmd.createSession();
 
@@ -102,9 +102,9 @@ public class WidgetPackager {
 
             // parse/validate config.xml
             Logger.logMessage(LogType.INFO, "PROGRESS_SESSION_CONFIGXML");
-            XMLParser xmlparser = new ConfigXMLParser();			
+            XMLParser xmlparser = new ConfigXMLParser();
             WidgetConfig config = xmlparser.parseXML(wa); // raw data, without \
-            
+
             // create/clean outputs/source
             // Logger.printInfoMessage("Widget packaging starts...");
             FileManager fileManager = new FileManager(bbwpProperties);
@@ -123,7 +123,7 @@ public class WidgetPackager {
             if (!SessionManager.getInstance().isPlayBook()) {
                 config.setExtensionClasses(fileManager.getExtensionClasses());
             }
-            
+
             // create autogen file
             WidgetConfigSerializer wcs = new WidgetConfig_v1Serializer(config, entryClassTable);
             byte[] autogenFile = wcs.serialize();
@@ -145,7 +145,7 @@ public class WidgetPackager {
 
                 // just for demo purposes, we hard code the source file path
                 mxmlc.run();
-            
+
                 // *** just for demo purposes, we HARD CODE THE SOURCE PATH ***
                 Logger.logMessage(LogType.INFO, "PROGRESS_PACKAGING");
                 AirPackager packager = new AirPackager(bbwpProperties, config);
@@ -215,15 +215,15 @@ public class WidgetPackager {
         } catch (Exception e) {
             System.out.println(e);
             returnCode = UNEXPECTED_ERROR_RCODE;
-        } 
-        
+        }
+
         System.exit(returnCode);
     }
-    
+
         public static Object[] getVersion() {
             return new Object[] { new WidgetPackager().getClass().getPackage().getImplementationVersion() };
         }
-        
+
 
     private static void signCod(SessionManager sessionManager) throws Exception {
         Process signingProcess;
@@ -376,7 +376,7 @@ public class WidgetPackager {
                     SessionManager.getInstance().getSourceFolder(), // destination for extensions
                     featureID);
             }
-            
+
             //
             // Fill-in the javascript entry-class table. This is used elsewhere.
             //

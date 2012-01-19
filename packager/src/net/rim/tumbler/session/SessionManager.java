@@ -31,18 +31,18 @@ import net.rim.tumbler.signing.SigningSupport;
 public class SessionManager {
     private static final String BAR_FILE_EXTENSION = ".bar";
     private static SessionManager   _instance = null;
-    
+
     // environment properties
     public static final String BBWP_JAR_PATH;
-    
+
     private String          _bbwpJarFolder;
-    private String          _sessionHome; 
+    private String          _sessionHome;
     private String          _tld;
-    
+
     // widget info
     private String          _widgetArchive;
     private String          _archiveName;
-    
+
     // command line settings
     private boolean         _requireSigning;
     private String          _password;
@@ -55,25 +55,25 @@ public class SessionManager {
     private boolean         _debugMode;
     private boolean         _debugModeInternal;
     private boolean         _isVerbose;
-    
+
     // for PlayBook WebWorks
     private boolean			_playbook;
-    
+
     public boolean isPlayBook() {
         return _playbook;
     }
-    
+
     static {
         try {
             BBWP_JAR_PATH = URLDecoder.decode(SessionManager.class
                     .getProtectionDomain().getCodeSource().getLocation()
-                    .getPath(), "UTF-8");           
+                    .getPath(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new SessionException(e, "Unexpected error decoding BBWP JAR path.");
         }
     }
 
-    public static void createInstance (            
+    public static void createInstance (
             String archiveName,
             String widgetArchive,
             String bbwpInstallFolder,
@@ -106,11 +106,11 @@ public class SessionManager {
                 isVerbose,
                 playbook);
     }
-    
+
     public static SessionManager getInstance() {
         return _instance;
     }
-    
+
     private SessionManager (
             String archiveName,
             String widgetArchive,
@@ -127,7 +127,7 @@ public class SessionManager {
             boolean debugModeInternal,
             boolean isVerbose,
             boolean playbook ) throws Exception {
-        
+
         _widgetArchive = widgetArchive;
         _archiveName = archiveName;
         _requireSigning = requireSigning;
@@ -143,18 +143,18 @@ public class SessionManager {
         _isVerbose = isVerbose;
         _bbwpJarFolder = bbwpInstallFolder;
         _playbook = playbook;
-        
+
         // determine home directory
         _sessionHome = determineSessionHome();
-        
+
         // validate session - check signing keys
         if (_requireSigning) {
             checkSignatureKeys();
         }
-        
+
         // validate widget archive
         validateArchive(_widgetArchive);
-        
+
         // load top level domain info
         BufferedReader input = new BufferedReader(new FileReader(new File(
                 _bbwpJarFolder + "tld.txt")));
@@ -168,7 +168,6 @@ public class SessionManager {
     }
 
     private void validateArchive(String archive) throws PackageException {
-
         File f = new File(archive);
         ZipFile zipFile;
 
@@ -184,7 +183,7 @@ public class SessionManager {
             }
         }
     }
-    
+
     private String determineSessionHome() {
         String home = "";
 
@@ -202,7 +201,7 @@ public class SessionManager {
                     .substring(0, home.lastIndexOf(File.separator+"bin"));
         }
     }
-    
+
     private void checkSignatureKeys() throws Exception {
         if (!isPlayBook()) {
             String keyPath = _bbwpJarFolder + WidgetPackager.SIGNATURE_KEY_FILE;
@@ -215,7 +214,7 @@ public class SessionManager {
             throw new ValidationException("EXCEPTION_MISSING_SIGNING_KEYS");
         }
     }
-    
+
     public String getBBWPJarFolder() {
         return _bbwpJarFolder;
     }
@@ -271,11 +270,11 @@ public class SessionManager {
     public boolean isVerbose() {
         return _isVerbose;
     }
-    
+
     public String getSessionHome() {
         return _sessionHome;
     }
-    
+
     public String getTLD() {
         return _tld;
     }
